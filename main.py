@@ -1,6 +1,7 @@
 #To run our code: uvicorn main:app --reload
 
 #Python
+from doctest import Example
 from typing import Optional
 from enum import Enum
 #Pydantic
@@ -31,20 +32,34 @@ class Person (BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example = "Orlando"
         )
     last_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="Alemán"
         )
     age: int = Field(
         ...,
         gt=0,
-        le=155
+        le=155,
+        example = 26
     )
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
+    hair_color: Optional[HairColor] = Field(default=None, example = "black")
+    is_married: Optional[bool] = Field(default=None, example = True)
+
+    # class Config:
+    #     schema_extra = {
+    #         "example": {
+    #             "first_name": "Facundo",
+    #             "last_name": "Hernandez Rivera",
+    #             "age": 26,
+    #             "hair_color": "brown",
+    #             "is_married": "False"
+    #         }
+    #     }
 
 
 @app.get("/")
@@ -92,8 +107,9 @@ def update_person(
         gt=0
     ),
     person: Person = Body(),
-    location: Location = Body()
+    #location: Location = Body()
 ):
-    results = person.dict()
-    results.update(location)
-    return results
+    #results = person.dict()
+    #results.update(location)
+    #return results
+    return person
